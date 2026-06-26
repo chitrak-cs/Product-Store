@@ -1,17 +1,25 @@
 import { sql } from "../config/db.js";
-export const getProducts=async (req,res)=>{
-    try {
-        const products = await sql`
-        SELECT * FROM products
-        ORDER BY created_at DESC
-        `;
-        console.log("fetched products",products);
-        res.status(200).json({success:true,data:products});
-    } catch (error) {
-        console.log("Error in getProducts function",error);
-        res.status(500).json({success: false, message: "Internal Server Error"});
-    }
+
+export const getProducts = async (req, res) => {
+  try {
+    const products = await sql`
+      SELECT * FROM products
+      ORDER BY created_at DESC
+    `;
+    res.status(200).json({
+    success: true,
+    data: products,
+    });
+  }catch (error) {
+    console.error("Full error:", error);
+    console.error("Message:", error.message);
+    console.error("Code:", error.code);
+    console.error("Cause:", error.cause);
+    console.error("SourceError:", error.sourceError);
+
+    res.status(500).json({ success: false, message: error.message });
 }
+};
 export const createProduct=async (req,res)=>{
     const {name,price,image} = req.body;
     if (!name || !price || !image){
