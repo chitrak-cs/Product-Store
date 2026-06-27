@@ -7,7 +7,9 @@ export const aj = arcjet({
     characteristics: ["ip.src"],
     rules : [
         //shield protects app from common attacks (SQL injection,XSS,CSRF attacks)
-        shield(),
+        shield({
+            mode: process.env.NODE_ENV === "production" ? "LIVE" : "DRY_RUN"
+        }),
         detectBot({
             mode: "DRY_RUN",
             allow: ["CATEGORY:SEARCH_ENGINE"],
